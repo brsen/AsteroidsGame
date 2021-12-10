@@ -1,5 +1,6 @@
-Spaceship[] fleet = new Spaceship[6];
+Spaceship ship = new Spaceship(250, 250);
 Star[] stars = new Star[200];
+ArrayList <Asteroid> roids = new ArrayList <Asteroid>();
 boolean isUP, isDOWN, isLEFT, isRIGHT;
 public void setup() 
 {
@@ -7,55 +8,51 @@ public void setup()
   for(int i = 0; i < stars.length; i++) {
     stars[i] = new Star();
   }
-
-  fleet[0] = new Spaceship(220, 250);
-  fleet[1] = new Spaceship(250, 250);
-  fleet[2] = new Spaceship(280, 250);
-  fleet[3] = new Spaceship(235, 210);
-  fleet[4] = new Spaceship(265, 210);
-  fleet[5] = new Spaceship(250, 170);
+  
+  for(int i = 0; i < 10; i++)
+    roids.add(new Asteroid());
   
 }
 
 public void draw() 
 {
-  fill(0, 20);
+  fill(0);
   rect(0,0,width,height);
  
   if (isLEFT) {
-    for(Spaceship i : fleet)
-      i.turn(-3);
+    ship.turn(-3);
   }
   if (isRIGHT) { 
-    for(Spaceship i : fleet)
-      i.turn(3);
+      ship.turn(3);
   }
   
   if (isUP) {
-    for(Spaceship i : fleet)
-      i.accelerate(0.2);
+      ship.accelerate(0.2);
   }
   if (isDOWN) {
-    for(Spaceship i : fleet)
-      i.stoop();
+      ship.stoop();
   }
   
-  for(Spaceship i : fleet) {
-    if(i.getXspeed() > 5) {
-      i.setXspeed(5);
-    }
-    if(i.getXspeed() < -5)
-      i.setXspeed(-5);
-    if(i.getYspeed() < -5)
-      i.setYspeed(-5);
-    if(i.getYspeed() > 5) {
-      i.setYspeed(5);
-    }
+  if(ship.getXspeed() > 3) {
+    ship.setXspeed(3);
+  }
+  if(ship.getXspeed() < -3)
+    ship.setXspeed(-3);
+  if(ship.getYspeed() < -3)
+    ship.setYspeed(-3);
+  if(ship.getYspeed() > 3) {
+    ship.setYspeed(3);
   }
   
- for(Spaceship i : fleet) {
-    i.move();
-    i.show();
+    ship.move();
+    ship.show();
+ 
+ for (int i = 0; i < roids.size(); i++) {
+   roids.get(i).move();
+     while (dist(roids.get(i).getX(), roids.get(i).getY(), ship.getX(), ship.getY()) < 25) {
+       roids.set(i, new Asteroid());
+     }
+   roids.get(i).show();
  }
   
   for(Star i : stars) {
@@ -77,11 +74,7 @@ public void keyPressed() {
     isRIGHT = true;
   }
   if(keyCode == 72) {
-    double newX = Math.random() * 400;
-    double newY = Math.random() * 400;
-    double newPointDirection = Math.random() * 360;
-    for(Spaceship i : fleet)
-      i.hyperspace(newX, newY, newPointDirection);
+      ship.hyperspace();
   }
 }
 
